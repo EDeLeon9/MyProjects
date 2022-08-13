@@ -1,0 +1,20 @@
+﻿RegistrarInventario
+1.0.0.0
+
+winexe
+C#
+.cs
+C:\Visual Studio\GitHub\RegistrarInventario\obj\Debug\netcoreapp3.1\
+RegistrarInventario
+none
+false
+TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;
+C:\Visual Studio\GitHub\RegistrarInventario\App.xaml
+18-1969708445
+
+35-922137705
+203-296269368
+DetailsBox.xaml;StylesAndTemplates\ButtonTemplate.xaml;StylesAndTemplates\CheckBoxTemplate.xaml;StylesAndTemplates\ComboBoxTemplate.xaml;StylesAndTemplates\ScrollBarStyle.xaml;StylesAndTemplates\TabItemTemplate.xaml;StylesAndTemplates\ToggleButtonTemplate.xaml;UserControls\DetailsButton.xaml;UserControls\LabeledCheckBox.xaml;UserControls\LabeledComboBox.xaml;UserControls\LabeledTextBox.xaml;UserControls\VerticalSeparator.xaml;View\IngresarInventario.xaml;View\MainWindow.xaml;View\VerGastos.xaml;View\VerOrdenes.xaml;View\VerPaquetes.xaml;..\CommonFiles\ToastMessage.xaml;
+
+True
+
