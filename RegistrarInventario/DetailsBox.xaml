@@ -1,0 +1,45 @@
+﻿<Window x:Class="RegistrarInventario.DetailsBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RegistrarInventario"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title="{Binding WinTitle, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Width="480" SizeToContent="Height" MinWidth="480" MinHeight ="160" Background="#505050"
+        ContentRendered="Window_ContentRendered">
+
+    <Grid x:Name="grdWindow" Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Source="/Resources/error_32x34px.png" Margin="0,10" Stretch="None"/>
+            <TextBox x:Name="txtContent" Grid.Column="1" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" IsReadOnly="True" VerticalAlignment="Center" Text="{Binding TxtContent, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+            <local:DetailsButton x:Name="btnDetalles" Grid.Column="0" ButtonClick="btnDetalles_ButtonClick" ContentText="{Binding TxtDetailsButtonText, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button x:Name="btnCerrar" Grid.Column="2" Content="{Binding TxtCloseButtonText, UpdateSourceTrigger=PropertyChanged}" Width="80" Click="btnCerrar_Click"/>
+        </Grid>
+
+        <Border x:Name="bdrDetails" Margin="0,10,0,0" Grid.Row="2" BorderBrush="Gray" BorderThickness="1px" Background="#303030">
+            <ScrollViewer Style="{StaticResource scrollViewerStyle}">
+                <TextBox Margin="5" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" IsReadOnly="True" Text="{Binding TxtDetails, UpdateSourceTrigger=PropertyChanged}" />
+            </ScrollViewer>
+        </Border>
+
+    </Grid>
+</Window>

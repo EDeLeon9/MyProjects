@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="RegistrarInventario.LabeledComboBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RegistrarInventario"
+             mc:Ignorable="d" 
+             d:DesignHeight="24" d:DesignWidth="200"
+             x:Name="uCLabeledComboBox">
+
+    <UserControl.Resources>
+        <Style x:Key="comboBoxMainStyle" TargetType="ComboBoxItem">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="multipleColumnsStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource comboBoxMainStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Grid>
+                            <Border x:Name="templateBorder" BorderThickness="1" BorderBrush="Transparent"/>
+                            <Control Template="{Binding CboControlTemplateItems, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="BorderBrush" Value="#26A0DA" TargetName="templateBorder"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5526A0DA" TargetName="templateBorder"/>
+                                <Setter Property="BorderBrush" Value="#26A0DA" TargetName="templateBorder"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="IsHighlighted" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="#55FFFFFF" TargetName="templateBorder"/>
+                                <Setter Property="BorderBrush" Value="#FFFFFF" TargetName="templateBorder"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="IsHighlighted" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="#5526A0DA" TargetName="templateBorder"/>
+                                <Setter Property="BorderBrush" Value="#26A0DA" TargetName="templateBorder"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="#55135495" TargetName="templateBorder"/>
+                                <Setter Property="BorderBrush" Value="#135495" TargetName="templateBorder"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
+    <DockPanel>
+
+        <Label x:Name="lblLabel" 
+               VerticalContentAlignment="Center" 
+               Content="{Binding LblContent, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox, FallbackValue=LabeledComboBox:}" 
+               Width="{Binding LblWidth, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"/>
+
+
+        <ComboBox x:Name="cboComboBox"
+                  VerticalContentAlignment="Center" 
+                  Grid.IsSharedSizeScope="True"
+                  ItemContainerStyle="{StaticResource comboBoxMainStyle}"
+                  ItemsSource="{Binding CboItemsSource, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}" 
+                  SelectedValuePath="{Binding CboSelectedValuePath, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"
+                  DisplayMemberPath="{Binding CboDisplayMemberPath, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"
+                  SelectedValue="{Binding CboSelectedValue, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"
+                  SelectedItem="{Binding CboSelectedItem, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"
+                  Text="{Binding CboText, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"
+                  ItemTemplate="{Binding CboItemTemplate, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}"
+                  IsEditable="{Binding CboIsEditable, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledComboBox}">
+        </ComboBox>
+        
+    </DockPanel>
+    
+</UserControl>

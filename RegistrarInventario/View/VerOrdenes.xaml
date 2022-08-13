@@ -1,0 +1,183 @@
+﻿<Page x:Class="RegistrarInventario.VerOrdenes"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RegistrarInventario"
+      xmlns:ab="clr-namespace:AttachedBehaviors"
+      mc:Ignorable="d" 
+      d:DesignHeight="830" d:DesignWidth="1770">
+    
+    <Page.DataContext>
+        <local:VM_VerOrdenes x:Name="dtcVM_VerOrdenes"/>
+    </Page.DataContext>
+
+    <Grid Background="{StaticResource windowRectangleBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <DockPanel Grid.Row="0" Margin="12">
+            <ToggleButton DockPanel.Dock="Left" HorizontalAlignment="Left" Content="Nueva Orden" Width="90" Height="26" IsChecked="{Binding AgregandoNuevaOrden}" Command="{Binding CommandNuevaOrden}"/>
+            <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Content="Regresar" Margin="18,0,0,0" Width="80" Height="26" Command="{Binding CommandRegresar}"/>
+            <!--<Button DockPanel.Dock="Right" HorizontalAlignment="Right" Content="Elegir Orden Seleccionada" Width="165" Height="26" Command="{Binding CommandElegirOrdenSeleccionada}"/>-->
+        </DockPanel>
+
+        <Separator Margin="12,0" Grid.Row="1"/>
+
+        <Grid Grid.Row="2" Margin="12,12,12,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,2,0,8">
+                    <Label Content="Conteo de filas:" Padding="0"/>
+                    <Label Content="{Binding Items.Count, ElementName=grdOrdenes}" Padding="4,0,2,0"/>
+                </StackPanel>
+                
+                <DataGrid x:Name="grdOrdenes" ItemsSource="{Binding ColOrdenes}" SelectedItem="{Binding SelectedOrden}">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar" BasedOn="{StaticResource scrollBarStyle}"/>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource dataGridCellStyle}"/>
+                    </DataGrid.Resources>
+
+                    <!--No se usa porque el Command se ejecuta si haces doble clic en una parte del DataGrid que no es la fila
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CommandElegirOrdenSeleccionada}"/>
+                </DataGrid.InputBindings>-->
+
+                    <DataGrid.RowStyle>
+                        <!--Con BasedOn="{StaticResource {x:Type DataGridRow}} se basa en el estilo implícito del archivo App.xaml-->
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                            <Setter Property="ab:AttachedBehavior.EventType" Value="MouseLeftDoubleClick"/>
+                            <Setter Property="ab:AttachedBehavior.Command" Value="{Binding CommandElegirOrdenSeleccionada, ElementName=dtcVM_VerOrdenes}"/>
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <!--Se usa "Source={x:Reference..." en lugar de "ElementName=..." ya que el ContextMenu no está dentro del VisualTree principal-->
+                                    <!--Se usa dtcVM_VerOrdenes como DataContext y no el ItemSource del DataGrid-->
+                                    <ContextMenu DataContext="{Binding Source={x:Reference dtcVM_VerOrdenes}}">
+                                        <MenuItem Command="{Binding CommandEliminarOrden}">
+                                            <MenuItem.Style>
+                                                <Style TargetType="MenuItem">
+                                                    <Setter Property="Header" Value="Eliminar orden (solo órdenes sin productos)"/>
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding SelectedOrden.CantProductosOrden}" Value="0">
+                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                            <Setter Property="Header" Value="Eliminar orden"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </MenuItem.Style>
+                                            <MenuItem.Icon>
+                                                <!--Para usar imágenes hay que colocar la propiedad del archivo "Acción de compilación" como "Recurso" luego de agregarla al proyecto-->
+                                                <Image Source="/Resources/delete.png"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AgregandoNuevaOrden, ElementName=dtcVM_VerOrdenes}" Value="True">
+                                    <Setter Property="ContextMenu" Value="{x:Null}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="70" Header="Id Orden" Binding="{Binding IdOrden}" ElementStyle="{StaticResource ElementStyleCenter}"/>
+                        <DataGridTextColumn Width="45" Header="Cant. Prod." Binding="{Binding CantProductosOrden}" ElementStyle="{StaticResource ElementStyleCenter}"/>
+                        <DataGridTextColumn Width="170" Header="Fecha Orden" Binding="{Binding FechaOrden, Converter={StaticResource dateTimeConverter}}"/>
+                        <DataGridTextColumn Width="0.6*" Header="Total Orden" Binding="{Binding TotalOrden}"/>
+                        <DataGridTextColumn Width="3.2*" Header="Descripción de Orden" Binding="{Binding DescripcionOrden}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                        <DataGridTextColumn Width="1*" Header="Nombre de Tienda" Binding="{Binding NombreTienda}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                        <DataGridTextColumn Width="1.8*" Header="Nombre del Proveedor" Binding="{Binding NombreProveedor}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                        <DataGridTextColumn Width="2.8*" Header="Comentarios" Binding="{Binding ComentariosOrden}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+
+            <Grid Grid.Column="1" Margin="24,70,0,70">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <Label Content="Gastos de orden seleccionada:" FontSize="14"/>
+
+                <DataGrid x:Name="grdGastos" Grid.Row="1" ItemsSource="{Binding ColGastos}">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar" BasedOn="{StaticResource scrollBarStyle}"/>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource dataGridCellStyle}"/>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="0.7*" Header="Monto" Binding="{Binding MontoGasto}"/>
+                        <DataGridTextColumn Width="2.5*" Header="Descripción de Gasto" Binding="{Binding DescripcionGasto}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,2,0,0">
+                    <Label Content="Total de gastos:" Padding="0"/>
+                    <Label Content="{Binding SumMontoGasto}" Padding="4,0,2,0"/>
+                </StackPanel>
+
+                <Button Content="Ver detalle de gastos" Grid.Row="3" Margin="0,10,0,0" Height="26" Padding="12,0" HorizontalAlignment="Right" Command="{Binding CommandVerDetalleGastos}"/>
+            </Grid>
+        </Grid>
+
+        <Grid Margin="12,6,12,12" Grid.Row="3" Height="58">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="0.9*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <local:LabeledTextBox Grid.Column="0" TxtVerticalContentAlignment="Top" LblContent="Descr. Orden:" TxtTextWrapping="Wrap" TxtText="{Binding DescripcionOrden}"/>
+            <local:LabeledTextBox Grid.Column="1" Margin="12,0,0,0" LblContent="Fecha Orden:" Height="26" NumsNChars="/:" TxtText="{Binding FechaOrden}"/>
+            <local:LabeledComboBox Grid.Column="2" Margin="12,0,0,0" Height="26" LblContent="Tienda:" CboIsEditable="True" CboItemsSource="{Binding ColTiendas}" CboDisplayMemberPath="NombreTienda" CboSelectedValuePath="IdTienda" CboSelectedValue="{Binding IdTienda}"/>
+            <local:LabeledComboBox Grid.Column="3" Margin="12,0,0,0" Height="26" LblContent="Proveedor:" CboIsEditable="True" CboItemsSource="{Binding ColProveedores}" CboDisplayMemberPath="NombreProveedor" CboSelectedValuePath="IdProveedor" CboSelectedValue="{Binding IdProveedor}"/>
+            <local:LabeledTextBox Grid.Column="4" Margin="12,0,0,0" TxtVerticalContentAlignment="Top" LblContent="Comentarios:" TxtTextWrapping="Wrap" TxtText="{Binding ComentariosOrden}"/>
+            <local:LabeledCheckBox Grid.Column="5" LblContent="Terminado" Margin="12,0,0,0" ChkIsChecked="{Binding Terminado}"/>
+            
+            <Button Grid.Column="6" Margin="12,0,0,0" Width="90" Height="38" Command="{Binding CommandGuardarCambios}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Modificar" HorizontalAlignment="Center" FontSize="15" FontWeight="DemiBold"/>
+                                    <!--<TextBlock Text="Cambios" HorizontalAlignment="Center" Margin="0,-2,0,0"/>-->
+                                </StackPanel>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AgregandoNuevaOrden, ElementName=dtcVM_VerOrdenes}" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="Nuevo" HorizontalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                                            <!--<TextBlock Text="Orden" HorizontalAlignment="Center" Margin="0,-2,0,0"/>-->
+                                        </StackPanel>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>

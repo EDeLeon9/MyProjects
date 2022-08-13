@@ -1,0 +1,268 @@
+﻿<Page x:Class="RegistrarInventario.IngresarInventario"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RegistrarInventario"
+      mc:Ignorable="d" 
+      d:DesignHeight="830" d:DesignWidth="1770">
+
+    <Page.DataContext>
+        <local:VM_IngresarInventario x:Name="dtcVM_IngresarInventario"/>
+    </Page.DataContext>
+
+    <Grid>
+        <Grid Background="{StaticResource windowRectangleBackground}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Margin="12" Grid.Row="0" Height="58">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="2.3*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <DockPanel>
+                        <Button x:Name="btnIdOrden" Content="Id Orden:" Height="26" Padding="6,0" Command="{Binding CommandAbrirOrdenes}"/>
+                        <local:LabeledTextBox x:Name="txtIdOrden" LblWidth="5" Height="26" NumsNChars="+0" TxtText="{Binding IdOrden}" TxtVerticalContentAlignment="Center"/>
+                    </DockPanel>
+                    <local:LabeledTextBox x:Name="txtGastosOrden" Margin="0,6,0,0" LblContent="Gastos Orden:" Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" NumsNChars="0." TxtText="{Binding GastosOrden}"/>
+                </StackPanel>
+                <local:LabeledTextBox x:Name="txtDescripcionOrden" Grid.Column="1" Margin="12,0,0,0" TxtVerticalContentAlignment="Top" LblContent="Descr. Ord.:" TxtTextWrapping="Wrap" TxtIsReadOnly="True" TxtBackground="Transparent" TxtText="{Binding DescripcionOrden}"/>
+
+                <local:VerticalSeparator Grid.Column="2" Margin="24,0"/>
+
+                <StackPanel Grid.Column="3" Orientation="Vertical">
+                    <DockPanel>
+                        <Button x:Name="btnIdPaquete" Content="Id Paquete:" Height="26" Padding="6,0" Command="{Binding CommandAbrirPaquetes}"/>
+                        <local:LabeledTextBox x:Name="txtIdPaquete" LblWidth="5" Height="26" NumsNChars="+0" TxtText="{Binding IdPaquete}" TxtVerticalContentAlignment="Center"/>
+                    </DockPanel>
+                    <local:LabeledTextBox x:Name="txtGastosPaquete" Margin="0,6,0,0" LblContent="Gastos Paquete:" Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" NumsNChars="0." TxtText="{Binding GastosPaquete}"/>
+                </StackPanel>
+                <local:LabeledTextBox x:Name="txtDescripcionPaquete" Grid.Column="4" Margin="12,0,0,0" TxtVerticalContentAlignment="Top" LblContent="Descr. Paq.:" TxtTextWrapping="Wrap" TxtIsReadOnly="True" TxtBackground="Transparent" TxtText="{Binding DescripcionPaquete}"/>
+
+                <local:VerticalSeparator Grid.Column="5" Margin="24,0"/>
+
+                <local:LabeledTextBox x:Name="txtBuscarProducto" Grid.Column="6" Height="26" LblContent="Buscar Prod.:" TxtText="{Binding BuscarProducto}"/>
+                <!--Se colocó IsHitTestVisible para que no se vuelva a presionar el ToggleButton si está abierto el Popup-->
+                <ToggleButton x:Name="btnVerMasBuscarProducto" Content="Ver más" Grid.Column="7" Margin="12,0,0,0" Height="26" Width="60" IsHitTestVisible="{Binding IsOpen, ElementName=popupVerMasBuscarProducto, Converter={StaticResource invertBoolConverter}}" 
+                                  IsChecked="{Binding VerMasBuscarProductoIsChecked}" IsEnabled="{Binding ColBuscarProducto.Count, Converter={StaticResource integerIsGreaterThanOneToBoolConverter}}"/>
+                <!--Se coloca AllowsTransparency en True porque es obligatorio para PopupAnimation-->
+                <Popup x:Name="popupVerMasBuscarProducto" IsOpen="{Binding IsChecked, ElementName=btnVerMasBuscarProducto}" StaysOpen="False" Placement="Left" PlacementTarget="{Binding ElementName=btnVerMasBuscarProducto}" PopupAnimation="Slide" AllowsTransparency="True"
+                           VerticalOffset="{Binding ActualHeight, ElementName=btnVerMasBuscarProducto}" HorizontalOffset="{Binding ActualWidth, ElementName=btnVerMasBuscarProducto, Converter={StaticResource addStringToDoubleConverter}, ConverterParameter=5}">
+                    <Popup.Resources>
+                        <Style TargetType="ScrollBar" BasedOn="{StaticResource scrollBarStyle}"/>
+                    </Popup.Resources>
+                    <Border Padding="0,0,5,5">
+                        <ListBox MaxHeight="365" BorderBrush="Gray" ItemContainerStyle="{StaticResource listBoxItemMouseUpSelection}" ItemsSource="{Binding ColBuscarProducto}" SelectedItem="{Binding BuscarProductoItem}" DisplayMemberPath="NombreProducto">
+                            <ListBox.Effect>
+                                <DropShadowEffect BlurRadius="5" Opacity="0.5"/>
+                            </ListBox.Effect>
+                        </ListBox>
+                    </Border>
+                </Popup>
+            </Grid>
+
+            <Separator Margin="12,6" Grid.Row="1"/>
+
+            <Grid Margin="12" Grid.Row="2" Height="58">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <DockPanel>
+                        <Button x:Name="btnCategoria" Content="Categoria:" Height="26" Width="66"/>
+                        <local:LabeledComboBox  x:Name="cboCategoria" Height="26" LblWidth="5" CboIsEditable="True" CboItemsSource="{Binding ColCategoriasProducto}" CboSelectedValuePath="IdCategoriaProducto" CboDisplayMemberPath="Categoria" CboSelectedValue="{Binding IdCategoriaProducto}" />
+                    </DockPanel>
+                    <Grid Margin="0,6,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+                        <DockPanel>
+                            <Button x:Name="btnProducto" Content="Producto:" Height="26" Width="66"/>
+                            <local:LabeledComboBox x:Name="cboProducto" Grid.Column="0" Height="26" LblWidth="5" CboIsEditable="True" CboItemsSource="{Binding ColProductos}" CboDisplayMemberPath="NombreProducto" CboSelectedItem="{Binding ProductoItem}"/>
+                        </DockPanel>
+                        <local:LabeledTextBox x:Name="txtPrecio" Grid.Column="1" LblContent="Precio:" Margin="12,0,0,0" Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" NumsNChars="0." TxtText="{Binding Precio}"/>
+                    </Grid>
+                </StackPanel>
+                <local:LabeledTextBox x:Name="txtComentariosProducto" Grid.Column="1" Margin="12,0,0,0" TxtVerticalContentAlignment="Top" LblContent="Coment. Prod.:" TxtIsReadOnly="True" TxtTextWrapping="Wrap" TxtBackground="Transparent" TxtText="{Binding ComentariosProducto}"/>
+
+                <local:VerticalSeparator Grid.Column="2" Margin="24,0"/>
+
+                <DockPanel Grid.Column="3">
+                    <Button x:Name="btnColorTalla" Padding="6,0">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Color:" HorizontalAlignment="Right"/>
+                            <Border Height="15"/>
+                            <TextBlock Text="Talla:" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Button>
+                    <StackPanel Orientation="Vertical">
+                        <local:LabeledComboBox x:Name="cboColor" Grid.Column="0" Height="26" LblWidth="5" CboIsEditable="True" CboItemsSource="{Binding ColColores}" CboSelectedValue="{Binding Color}"/>
+                        <local:LabeledComboBox x:Name="cboTalla" Grid.Column="1" Margin="0,6,0,0" Height="26" LblWidth="5" CboIsEditable="True" CboItemsSource="{Binding ColVariacionesPorColor}" CboDisplayMemberPath="Talla" CboSelectedItem="{Binding VariacionItem}" CboColumnNames="Talla,TallaReal"/>
+                    </StackPanel>
+                </DockPanel>
+                <local:LabeledTextBox x:Name="txtNotasVariacion" Grid.Column="4" Margin="12,0,0,0" TxtVerticalContentAlignment="Top" TxtTextWrapping="Wrap" LblContent="Notas Variación:" TxtIsReadOnly="True" TxtBackground="Transparent" TxtText="{Binding NotasVariacion}" />
+            </Grid>
+
+            <Separator Margin="12,6" Grid.Row="3"/>
+
+            <Grid Margin="12" Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <local:LabeledTextBox x:Name="txtCosto" Grid.Column="0" LblContent="Costo:" TxtWidth="80" Height="26" NumsNChars="0." TxtText="{Binding CostoProducto}"/>
+                <local:LabeledTextBox x:Name="txtShippingProducto" Grid.Column="1" Margin="12,0,0,0" TxtWidth="80" LblContent="Shipping Prod.:" Height="26" NumsNChars="0." TxtText="{Binding ShippingProducto}"/>
+                <local:LabeledTextBox x:Name="txtDescuentoProducto" Grid.Column="2" Margin="12,0,0,0" TxtWidth="80" LblContent="Descuento Prod.:" Height="26" NumsNChars="0." TxtText="{Binding DescuentoProducto}"/>
+                <local:LabeledTextBox x:Name="txtReembolsoProducto" Grid.Column="3" Margin="12,0,0,0" TxtWidth="80" LblContent="Reembolso Prod.:" Height="26" NumsNChars="0." TxtText="{Binding ReembolsoProducto}"/>
+                <local:LabeledTextBox x:Name="txtComentariosProdInventario" Grid.Column="4" Margin="12,0,0,0" Height="26" LblContent="Coment. Prod. Inventario:" TxtText="{Binding ComentariosInventario}"/>
+                <local:LabeledCheckBox x:Name="chkNoLimpiar" Grid.Column="5" LblContent="No Limpiar" Margin="24,0,0,0" ChkIsChecked="{Binding NoLimpiar}"/>
+                <Button x:Name="btnAgregar" Grid.Column="6" Height="32" Width="70" Margin="12,0,0,0" Content="Agregar" Command="{Binding CommandAgregar}"/>
+            </Grid>
+
+            <Grid Grid.Row="5" Margin="0,12,24,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="txtAgruparInventario" Height="42" VerticalAlignment="Top" Command="{Binding CommandAgruparInventario}">
+                    <Path Fill="White" Data="M0,0 V12 L6,6 V12 L12,6 L6,0 V6 Z">
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ColumnCantidadVisibility}" Value="Visible">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <RotateTransform CenterX="6" CenterY="6" Angle="180"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
+                </Button>
+
+                <DataGrid x:Name="grdInventario" Grid.Column="1" ColumnHeaderHeight="40" ItemsSource="{Binding ColInventario}" SelectedItem="{Binding SelectedInventario}">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar" BasedOn="{StaticResource scrollBarStyle}"/>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource dataGridCellStyle}"/>
+                    </DataGrid.Resources>
+
+                    <DataGrid.RowStyle>
+                        <!--Con BasedOn="{StaticResource {x:Type DataGridRow}} se basa en el estilo implícito del archivo App.xaml-->
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <!--Se usa "Source={x:Reference..." en lugar de "ElementName=..." ya que el ContextMenu no está dentro del VisualTree principal-->
+                                    <!--Usa dtcVM_IngresarInventario como DataContext y no el ItemSource del DataGrid-->
+                                    <ContextMenu DataContext="{Binding Source={x:Reference dtcVM_IngresarInventario}}">
+                                        <MenuItem Command="{Binding CommandEliminarProducto}" Header="Eliminar Producto">
+                                            <MenuItem.Icon>
+                                                <!--Para usar imágenes hay que colocar la propiedad del archivo "Acción de compilación" como "Recurso" luego de agregarla al proyecto-->
+                                                <Image Source="/Resources/delete.png"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+                        <!--Se usa "Source={x:Reference..." en lugar de "ElementName=..." ya que los Headers no están dentro del VisualTree principal-->
+                        <DataGridTextColumn Header="Cant." Visibility="{Binding ColumnCantidadVisibility, Source={x:Reference dtcVM_IngresarInventario}}" Width="45" Binding="{Binding CantidadAgrupado}" ElementStyle="{StaticResource ElementStyleCenter}"/>
+                        <DataGridTextColumn Header="Nombre del Producto" Width="1.4*" Binding="{Binding NombreProducto}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                        <DataGridTextColumn Header="Color" Width="0.6*" Binding="{Binding Color}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                        <DataGridTextColumn Header="Talla" Width="0.5*" Binding="{Binding Talla}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                        <DataGridTextColumn Header="Costo Producto" Width="0.4*" Binding="{Binding CostoProducto}"/>
+                        <DataGridTextColumn Header="Costo Final Producto" Width="0.3*" Binding="{Binding CostoFinalProducto}"/>
+                        <DataGridTextColumn Header="Precio" Width="0.3*" Binding="{Binding Precio}"/>
+                        <DataGridTextColumn Header="Ganancia Estimada" Width="0.3*" Binding="{Binding GananciaEstimada}"/>
+                        <DataGridTextColumn Header="Notas de Talla y Comentarios" Width="2*" Binding="{Binding NotasTallaYComentarios}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="6" HorizontalAlignment="Right" Margin="0,2,24,8">
+                <Label Content="Conteo de filas:" Padding="0" />
+                <Label Content="{Binding Items.Count, ElementName=grdInventario}" Padding="4,0,2,0"/>
+            </StackPanel>
+
+            <Grid Margin="12,6,12,12" Grid.Row="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.65*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <local:LabeledTextBox x:Name="txtIdOrdenSelect" Grid.Column="0" LblContent="Id Orden Selección:" Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" NumsNChars="+0" TxtText="{Binding OrdenSelect.IdOrden}"/>
+                <DockPanel Grid.Column="1" Margin="24,0,0,0">
+                    <Button x:Name="btnGastosOrdenSelect" Content="Gastos Orden:" Height="26" Padding="6,0" Command="{Binding CommandAbrirGastosOrden}"/>
+                    <local:LabeledTextBox x:Name="txtGastosOrdenSelect" LblWidth="5" Height="26" TxtIsReadOnly="True" NumsNChars="0." TxtBackground="Transparent" TxtText="{Binding OrdenSelect.GastosOrden}"/>
+                </DockPanel>
+                <DockPanel Grid.Column="2" Margin="24,0,0,0">
+                    <Button x:Name="btnProveedorSelect" Content="Proveedor:" Height="26" Padding="6,0"/>
+                    <local:LabeledTextBox x:Name="txtProveedorSelect" LblWidth="5" Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" TxtText="{Binding OrdenSelect.NombreProveedor}"/>
+                </DockPanel>
+                <DockPanel Grid.Column="3" Margin="24,0,0,0">
+                    <Button x:Name="btnTiendaSelect" Content="Tienda:" Height="26" Padding="6,0"/>
+                    <local:LabeledTextBox x:Name="txtTiendaSelect" LblWidth="5" Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" TxtText="{Binding OrdenSelect.NombreTienda}"/>
+                </DockPanel>
+                <local:LabeledTextBox x:Name="txtTotalOrdenSelect" Grid.Column="4" Margin="24,0,0,0" LblContent="Total Orden:" Height="26" TxtWidth="80" TxtIsReadOnly="True" NumsNChars="0." TxtBackground="Transparent" TxtText="{Binding OrdenSelect.TotalOrden}"/>
+                <local:LabeledTextBox x:Name="txtCantidadProductosOrdenSelect" Grid.Column="6" Margin="24,0,0,0" LblContent="Cant. Prod. Orden:" Height="26" TxtWidth="60" HorizontalAlignment="Right" TxtIsReadOnly="True" NumsNChars="+0" TxtBackground="Transparent" TxtText="{Binding OrdenSelect.CantProductosOrden}"/>
+            </Grid>
+
+            <Separator Margin="12,6" Grid.Row="8"/>
+
+            <Grid Margin="12" Grid.Row="9">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <local:LabeledTextBox x:Name="txtIdPaqueteSelect" Grid.Column="0" LblContent="Id Paquete Selección:" Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" NumsNChars="+0" TxtText="{Binding PaqueteSelect.IdPaquete}"/>
+                <DockPanel Grid.Column="1" Margin="24,0,0,0">
+                    <Button x:Name="btnGastosPaqueteSelect" Content="Gastos Paquete:" Height="26" Padding="6,0" Command="{Binding CommandAbrirGastosPaquete}"/>
+                    <local:LabeledTextBox x:Name="txtGastosPaqueteSelect" LblWidth="5"  Height="26" TxtIsReadOnly="True" TxtBackground="Transparent" TxtText="{Binding PaqueteSelect.GastosPaquete}"/>
+                </DockPanel>
+                <local:LabeledTextBox x:Name="txtCantidadProductosPaqueteSelect" Grid.Column="3" Margin="24,0,0,0" LblContent="Cant. Prod. Paquete:" Height="26" TxtWidth="60" HorizontalAlignment="Right" TxtIsReadOnly="True" TxtBackground="Transparent" TxtText="{Binding PaqueteSelect.CantProductosPaquete}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

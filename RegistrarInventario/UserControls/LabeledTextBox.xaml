@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="RegistrarInventario.LabeledTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RegistrarInventario"
+             mc:Ignorable="d" 
+             d:DesignHeight="26" d:DesignWidth="200"
+             x:Name="uCLabeledTextBox">
+    <DockPanel>
+        
+        <!-- FallbackValue es el valor que toma si Binding devuelve Null (ya sea si el valor de la propiedad es Null o si no encontró la propiedad).
+        Pero para este UserControl se tomará por defecto el valor del FrameworkPropertyMetadata del DependencyProperty que se asigna a esa propiedad en el código de la clase -->
+
+        <!-- ElementName se usa en lugar de asignar el DataContext desde código de la clase, ya que al usar este control se necesita el DataContext de la ventana 
+        donde se crea para que funcione el evento de PropertyChanged del View Model-->
+
+        <Label x:Name="lblLabel" VerticalContentAlignment="Center"
+               Content="{Binding LblContent, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox, FallbackValue=LabeledTextBox:}" 
+               Width="{Binding LblWidth, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox}"/>
+
+        <TextBox x:Name="txtTextBox"
+                 Text="{Binding TxtText, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox}" 
+                 Width="{Binding TxtWidth, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox}" 
+                 VerticalContentAlignment="{Binding TxtVerticalContentAlignment, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox}"
+                 IsReadOnly="{Binding TxtIsReadOnly, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox}"
+                 Background="{Binding TxtBackground, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox}"
+                 TextWrapping="{Binding TxtTextWrapping, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledTextBox}"
+                 LostFocus="txtTextBox_LostFocus" GotFocus="txtTextBox_GotFocus" PreviewMouseLeftButtonDown="txtTextBox_PreviewMouseLeftButtonDown">
+        </TextBox>
+
+    </DockPanel>
+    
+</UserControl>

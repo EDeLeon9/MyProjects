@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="RegistrarInventario.LabeledCheckBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RegistrarInventario"
+             mc:Ignorable="d" 
+             d:DesignHeight="26" d:DesignWidth="130"
+             x:Name="uCLabeledCheckBox">
+    
+    <DockPanel>
+
+        <CheckBox x:Name="chkCheckBox" VerticalAlignment="Center" IsChecked="{Binding ChkIsChecked, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledCheckBox}"/>
+        
+        <Label x:Name="lblLabel" 
+               Content="{Binding LblContent, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledCheckBox, FallbackValue=LabeledCheckBox}"
+               Width="{Binding LblWidth, UpdateSourceTrigger=PropertyChanged, ElementName=uCLabeledCheckBox}"
+               VerticalContentAlignment="Center" />
+        
+    </DockPanel>
+    
+</UserControl>

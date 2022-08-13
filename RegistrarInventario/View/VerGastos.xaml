@@ -1,0 +1,179 @@
+﻿<Page x:Class="RegistrarInventario.VerGastos"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RegistrarInventario"
+      mc:Ignorable="d" 
+      d:DesignHeight="830" d:DesignWidth="1770">
+
+    <Page.Resources>
+        <local:JoinStringsConverter x:Key="joinStringsConverter"/>
+    </Page.Resources>
+    
+    <Page.DataContext>
+        <local:VM_VerGastos x:Name="dtcVM_VerGastos"/>
+    </Page.DataContext>
+
+    <Grid Background="{StaticResource windowRectangleBackground}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="425"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="12,0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label Content="Gastos de " Padding="0" FontWeight="Bold" FontSize="18"/>
+            <Label Content="{Binding TablaAsociada}" Padding="0" FontWeight="Bold" FontSize="18"/>
+            <Label Content=" Nº " Padding="0" FontWeight="Bold" FontSize="18"/>
+            <Label Content="{Binding IdTablaAsociada}" Padding="0" FontWeight="Bold" FontSize="18"/>
+            <local:VerticalSeparator Margin="26,0,0,0" />
+            <ToggleButton Margin="26,0,0,0" Content="Nuevo Gasto" Width="90" Height="26" IsChecked="{Binding AgregandoNuevoGasto}" Command="{Binding CommandNuevoGasto}"/>
+        </StackPanel>
+
+        <Button x:Name="btnRegresar" Grid.Row="0" Margin="12" Content="Regresar" Width="80" Height="26" HorizontalAlignment="Right" Command="{Binding CommandRegresar}"/>
+
+        <Separator Margin="12,0" Grid.Row="1" />
+
+        <Grid Grid.Row="2" Margin="12,12,12,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.75*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel>
+                <Grid DockPanel.Dock="Bottom" Margin="0,2,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="135"/>
+                        <ColumnDefinition Width="135"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <Label Content="Total de Gastos:" Padding="0"/>
+                        <Label Content="{Binding SumMontoGasto}" Padding="4,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2">
+                        <Label Content="Conteo de filas:" Padding="0"/>
+                        <Label Content="{Binding Items.Count, ElementName=grdGastos}" Padding="4,0,2,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <DataGrid x:Name="grdGastos" ItemsSource="{Binding ColGastos}" SelectedItem="{Binding SelectedGasto}">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar" BasedOn="{StaticResource scrollBarStyle}"/>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource dataGridCellStyle}"/>
+
+                        <Style x:Key="ElementStyleWrapping" TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.RowStyle>
+                        <!--Con BasedOn="{StaticResource {x:Type DataGridRow}} se basa en el estilo implícito del archivo App.xaml-->
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <!--Se usa "Source={x:Reference..." en lugar de "ElementName=..." ya que el ContextMenu no está dentro del VisualTree principal-->
+                                    <!--Se usa dtcVM_VerGastos como DataContext y no el ItemSource del DataGrid-->
+                                    <ContextMenu DataContext="{Binding Source={x:Reference dtcVM_VerGastos}}">
+                                        <MenuItem Command="{Binding CommandEliminarGasto}" Header="Eliminar gasto">
+                                            <MenuItem.Icon>
+                                                <!--Para usar imágenes hay que colocar la propiedad del archivo "Acción de compilación" como "Recurso" luego de agregarla al proyecto-->
+                                                <Image Source="/Resources/delete.png"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AgregandoNuevoGasto, ElementName=dtcVM_VerGastos}" Value="True">
+                                    <Setter Property="ContextMenu" Value="{x:Null}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="70" Header="Id Gasto" Binding="{Binding IdGasto}" ElementStyle="{StaticResource ElementStyleCenter}"/>
+                        <DataGridTextColumn Width="170" Header="Fecha de Gasto" Binding="{Binding FechaGasto, Converter={StaticResource dateTimeConverter}}"/>
+                        <DataGridTextColumn Width="0.4*" Header="Monto" Binding="{Binding MontoGasto}"/>
+                        <DataGridTextColumn Width="2.5*" Header="Descripción de Gasto" Binding="{Binding DescripcionGasto}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                        <DataGridTextColumn Width="3*" Header="Comentarios" Binding="{Binding ComentariosGasto}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+
+
+            <Grid Grid.Row="2" Grid.Column="1" Margin="24,0,0,26">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!--FallbackValue en blanco deja vacío el label si no se asigna nada a la propiedad-->
+                <Label Content="{Binding TablaAsociadaPlural, Converter={StaticResource joinStringsConverter}, ConverterParameter='%:', FallbackValue=''}" FontSize="14"/>
+
+                <DataGrid x:Name="grdOrdenesOPaquetes" Grid.Row="1" ItemsSource="{Binding ColOrdenesOPaquetes}" SelectedItem="{Binding SelectedOrdenOPaquete}">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar" BasedOn="{StaticResource scrollBarStyle}"/>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource dataGridCellStyle}"/>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="70" Header="{Binding TablaAsociada, Source={x:Reference Name=dtcVM_VerGastos}, Converter={StaticResource joinStringsConverter}, ConverterParameter='Id %', FallbackValue=''}" Binding="{Binding IdOrden}" ElementStyle="{StaticResource ElementStyleCenter}"/>
+                        <DataGridTextColumn Width="170" Header="Fecha" Binding="{Binding FechaOrden, Converter={StaticResource dateTimeConverter}}"/>
+                        <DataGridTextColumn Width="0.7*" Header="Monto Total" Binding="{Binding TotalOrden}"/>
+                        <DataGridTextColumn Width="2.5*" Header="Descripción" Binding="{Binding DescripcionOrden}" ElementStyle="{StaticResource ElementStyleWrapping}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Button Grid.Row="2" Content="{Binding TablaAsociadaPlural, Converter={StaticResource joinStringsConverter}, ConverterParameter='Ver más datos de %'}" Margin="0,10,0,0" Height="26" Padding="15,0" HorizontalAlignment="Right" Command="{Binding CommandVerMasDatosOrdenesOPaquetes}"/>
+            </Grid>
+        </Grid>
+        
+        <Grid Margin="12,6,12,12" Grid.Row="4" Height="50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.9*"/>
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="28"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <local:LabeledTextBox Grid.Column="0" LblContent="Fecha Gasto:" Height="26" NumsNChars="/:" TxtText="{Binding FechaGasto}"/>
+            <local:LabeledTextBox Grid.Column="1" Margin="12,0,0,0" LblContent="Monto:" Height="26" NumsNChars="0." TxtText="{Binding MontoGasto}"/>
+            <local:LabeledTextBox Grid.Column="2" Margin="12,0,0,0" TxtVerticalContentAlignment="Top" LblContent="Descr. Gasto:" TxtTextWrapping="Wrap" TxtText="{Binding DescripcionGasto}"/>
+            <local:LabeledTextBox Grid.Column="3" Margin="12,0,0,0" TxtVerticalContentAlignment="Top" LblContent="Comentarios:" TxtTextWrapping="Wrap" TxtText="{Binding ComentariosGasto}"/>
+
+            <Button Grid.Column="5" Margin="12,0,0,0" Width="90" Height="38" Command="{Binding CommandGuardarCambios}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Modificar" HorizontalAlignment="Center" FontSize="15" FontWeight="DemiBold"/>
+                                    <!--<TextBlock Text="Cambios" HorizontalAlignment="Center" Margin="0,-2,0,0"/>-->
+                                </StackPanel>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AgregandoNuevoGasto, ElementName=dtcVM_VerGastos}" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="Nuevo" HorizontalAlignment="Center" FontSize="16" FontWeight="DemiBold"/>
+                                            <!--<TextBlock Text="Gasto" HorizontalAlignment="Center" Margin="0,-2,0,0"/>-->
+                                        </StackPanel>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>

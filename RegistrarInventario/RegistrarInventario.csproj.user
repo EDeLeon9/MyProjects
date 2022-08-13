@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>E:\Usuario\Documentos\Visual Studio 2019\Proyectos\RegistrarInventario\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="DetailsBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\DetailsButton.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\VerticalSeparator.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\IngresarInventario.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\VerGastos.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\VerOrdenes.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\VerPaquetes.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="..\CommonFiles\ToastMessage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="DetailsBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StylesAndTemplates\ScrollBarStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StylesAndTemplates\TabItemTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StylesAndTemplates\ToggleButtonTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\DetailsButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\VerticalSeparator.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StylesAndTemplates\ButtonTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StylesAndTemplates\CheckBoxTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\IngresarInventario.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\VerGastos.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\VerOrdenes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\VerPaquetes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>
